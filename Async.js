@@ -3,20 +3,19 @@
 */
 asyncOperation(callbackFunction);
 
-function asyncOperation(callback){
+function asyncOperation(callback) {
     // Do something asyncronously
     var err = null;
     var res = "response";
-    
-    if(callback){
+
+    if (callback) {
         callback(err, res);
     }
 }
-var callbackFunction = function(err, res){
+var callbackFunction = function (err, res) {
     if (err) {
         console.log('err :', err);
-    }
-    else{
+    } else {
         console.log('res :', res);
     }
 }
@@ -45,20 +44,21 @@ var promise3 = new Promise((resolve, reject) => {
         resolve(message);
     }, 2000)
 })
-function promiseMaker(name){
-    return new Promise(function(resolve, reject) {
-       // Do the Async thing here
-       var err = null;
-       var res = "response " + name; 
-       if(err){
-           reject(err);
-       }
-       else{
-           resolve(res);
-       }
+
+function promiseMaker(name) {
+    return new Promise(function (resolve, reject) {
+        // Do the Async thing here
+        var err = null;
+        var res = "response " + name;
+        if (err) {
+            reject(err);
+        } else {
+            resolve(res);
+        }
     });
 }
-function printResult(result){
+
+function printResult(result) {
     console.log('result :', result);
     console.log('message :', message);
 }
@@ -66,3 +66,27 @@ function printResult(result){
 Promise.all([promise1, promise2, promise3]).then(printResult);
 Promise.all([promise2, promise1, promise3]).then(printResult);
 Promise.all([promise3, promise2, promise1]).then(printResult);
+
+// Linking Promises
+function promisifyAdd(baseNumber) {
+    return new Promise((resolve, reject) => {
+        resolve(baseNumber + baseNumber);
+    });
+}
+
+promisifyAdd(2)
+    .then((result) => {
+        return promisifyAdd(result);
+    })
+    .then((result) => {
+        return promisifyAdd(result);
+    })
+    .then((result) => {
+        return promisifyAdd(result);
+    })
+    .then((result) => {
+        return promisifyAdd(result);
+    })
+    .then((result) => {
+        console.log(result)
+    })
